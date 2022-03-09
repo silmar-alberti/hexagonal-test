@@ -6,7 +6,7 @@ namespace App\Console\Commands;
 
 use App\Adapters\Modules\DataLoader\Repository\FindNfeAdapter;
 use App\Factories\Http\SendRequestFactory;
-use App\Modules\DataLoader\Repository\FindNfeRepository;
+use App\Factories\Modules\DataLoader\FindNfeAdapterFactory;
 use Core\Modules\DataLoader\Rule\LoadDataRule;
 use Core\Modules\DataLoader\UseCase;
 use Illuminate\Console\Command;
@@ -25,7 +25,7 @@ class LoadNfe extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'This command load nfes by api and save on project database';
 
     /**
      * Create a new command instance.
@@ -47,12 +47,7 @@ class LoadNfe extends Command
 
         $useCase = new UseCase(
             new LoadDataRule(
-                new FindNfeAdapter(
-                    SendRequestFactory::create(),
-                    'https://sandbox-api.arquivei.com.br',
-                    '329ea218aa65778fad452643fe4d9bdeba0673e6',
-                    '39020d7f2ff4485632166f578d486f0ab74174e0',
-                )
+                FindNfeAdapterFactory::create()
             ),
             // new FilterRule(),
             // new SaveDataRule(),
