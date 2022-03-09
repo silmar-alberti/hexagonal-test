@@ -40,7 +40,9 @@ final class FindNfeAdapterFactory
             }
         }
         if ([] !== $notFoundVarKeys) {
-            throw new WrongEnvException("Some Environment vars must be defined: '" . implode(',', $notFoundVarKeys) . "'");
+            throw new WrongEnvException(
+                "Some Environment vars must be defined: '" . implode(',', $notFoundVarKeys) . "'"
+            );
         }
     }
 }

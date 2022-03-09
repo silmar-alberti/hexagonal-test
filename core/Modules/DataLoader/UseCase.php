@@ -10,7 +10,6 @@ use Core\Modules\DataLoader\Rule\SaveDataRule;
 
 final class UseCase
 {
-
     public function __construct(
         private LoadDataRule $loadDataRule,
         // private FilterRule $filterRule,
