@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Console\Commands;
 
+use App\Adapters\Modules\DataLoader\IntegrationStatusAdapter;
 use App\Adapters\Modules\DataLoader\NfeExistsAdapter;
 use App\Adapters\Modules\DataLoader\SaveNfeAdapter;
 use App\Factories\Modules\DataLoader\FindExternalNfeAdapterFactory;
@@ -37,8 +38,8 @@ class LoadNfe extends Command
     public function __construct(
         private SaveNfeAdapter $saveNfeAdapter,
         private NfeExistsAdapter $nfeExistsAdapter,
-    )
-    {
+        private IntegrationStatusAdapter $integrationStatusAdapter,
+    ) {
         parent::__construct();
     }
 
@@ -52,7 +53,8 @@ class LoadNfe extends Command
 
         $useCase = new UseCase(
             new LoadDataRule(
-                FindExternalNfeAdapterFactory::create()
+                FindExternalNfeAdapterFactory::create(),
+                $this->integrationStatusAdapter,
             ),
             new FilterRule($this->nfeExistsAdapter),
             new SaveDataRule($this->saveNfeAdapter),

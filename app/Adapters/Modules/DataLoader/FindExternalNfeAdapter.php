@@ -23,8 +23,8 @@ class FindExternalNfeAdapter implements FindExternalNfeGateway
     public function get(?GetNfeFilterEntity $filter = null): array
     {
         $filters = [];
-        if ($filter !== null && $filter->limit !== null) {
-            $filters['limit'] = $filter->limit;
+        if ($filter !== null) {
+            $filters =  $this->getRequestFilters($filter);
         }
 
         $response = $this->httpClient->get(new RequestEntity(
@@ -51,5 +51,17 @@ class FindExternalNfeAdapter implements FindExternalNfeGateway
                 xml: $xmlObject,
             );
         }, $data->data);
+    }
+
+    private function getRequestFilters(GetNfeFilterEntity $filter)
+    {
+        $filterArray = [];
+        if ($filter->limit !== null) {
+            $filterArray['limit'] = $filter->limit;
+        }
+
+        $filterArray['cursor'] = $filter->cursor;
+
+        return $filterArray;
     }
 }
