@@ -8,9 +8,9 @@ use App\Dependencies\Http\Adapter\SendRequestAdapter;
 use Core\Dependencies\Entity\RequestEntity;
 use Core\Modules\DataLoader\Entity\GetNfeFilterEntity;
 use Core\Modules\DataLoader\Entity\NfeEntity;
-use Core\Modules\DataLoader\Gateway\FindNfeGateway;
+use Core\Modules\DataLoader\Gateway\FindExternalNfeGateway;
 
-class FindNfeAdapter implements FindNfeGateway
+class FindExternalNfeAdapter implements FindExternalNfeGateway
 {
     public function __construct(
         private SendRequestAdapter $httpClient,

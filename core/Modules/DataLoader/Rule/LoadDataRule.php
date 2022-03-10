@@ -6,12 +6,12 @@ namespace Core\Modules\DataLoader\Rule;
 
 use Core\Modules\DataLoader\Entity\GetNfeFilterEntity;
 use Core\Modules\DataLoader\Entity\NfeEntity;
-use Core\Modules\DataLoader\Gateway\FindNfeGateway;
+use Core\Modules\DataLoader\Gateway\FindExternalNfeGateway;
 
 class LoadDataRule implements RuleInterface
 {
     public function __construct(
-        private FindNfeGateway $findNfe
+        private FindExternalNfeGateway $findNfe
     ) {
     }
 

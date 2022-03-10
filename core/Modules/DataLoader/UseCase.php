@@ -12,8 +12,8 @@ final class UseCase
 {
     public function __construct(
         private LoadDataRule $loadDataRule,
-        // private FilterRule $filterRule,
-        // private SaveDataRule $saveDataRule,
+        private FilterRule $filterRule,
+        private SaveDataRule $saveDataRule,
     ) {
     }
 
@@ -21,11 +21,11 @@ final class UseCase
     {
         $data = $this->loadDataRule->apply();
 
-        // ($this->filterRule)($data);
-        // $filteredData = $this->filterRule->apply();
+        ($this->filterRule)($data);
+        $filteredData = $this->filterRule->apply();
 
-        // ($this->saveDataRule)($filteredData);
+        ($this->saveDataRule)($filteredData);
 
-        // return $this->saveDataRule->apply();
+        return $this->saveDataRule->apply();
     }
 }

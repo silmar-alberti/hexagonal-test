@@ -4,8 +4,12 @@ declare(strict_types=1);
 
 namespace App\Console\Commands;
 
-use App\Factories\Modules\DataLoader\FindNfeAdapterFactory;
+use App\Adapters\Modules\DataLoader\NfeExistsAdapter;
+use App\Adapters\Modules\DataLoader\SaveNfeAdapter;
+use App\Factories\Modules\DataLoader\FindExternalNfeAdapterFactory;
+use Core\Modules\DataLoader\Rule\FilterRule;
 use Core\Modules\DataLoader\Rule\LoadDataRule;
+use Core\Modules\DataLoader\Rule\SaveDataRule;
 use Core\Modules\DataLoader\UseCase;
 use Illuminate\Console\Command;
 
@@ -30,7 +34,10 @@ class LoadNfe extends Command
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(
+        private SaveNfeAdapter $saveNfeAdapter,
+        private NfeExistsAdapter $nfeExistsAdapter,
+    )
     {
         parent::__construct();
     }
@@ -45,10 +52,10 @@ class LoadNfe extends Command
 
         $useCase = new UseCase(
             new LoadDataRule(
-                FindNfeAdapterFactory::create()
+                FindExternalNfeAdapterFactory::create()
             ),
-            // new FilterRule(),
-            // new SaveDataRule(),
+            new FilterRule($this->nfeExistsAdapter),
+            new SaveDataRule($this->saveNfeAdapter),
         );
 
 

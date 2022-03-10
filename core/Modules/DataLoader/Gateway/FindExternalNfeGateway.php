@@ -7,7 +7,7 @@ namespace Core\Modules\DataLoader\Gateway;
 use Core\Modules\DataLoader\Entity\GetNfeFilterEntity;
 use Core\Modules\DataLoader\Entity\NfeEntity;
 
-interface FindNfeGateway
+interface FindExternalNfeGateway
 {
     /**
      * get Nfe by filters, return all if haven't filters

@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Factories\Modules\DataLoader;
 
-use App\Adapters\Modules\DataLoader\FindNfeAdapter;
+use App\Adapters\Modules\DataLoader\FindExternalNfeAdapter;
 use App\Exceptions\Modules\DataLoader\WrongEnvException;
 use App\Factories\Http\SendRequestFactory;
 
-final class FindNfeAdapterFactory
+final class FindExternalNfeAdapterFactory
 {
     private const ENV_VARS = [
         'ARQUIVEI_API_BASE_URI',
@@ -16,11 +16,11 @@ final class FindNfeAdapterFactory
         'ARQUIVEI_API_KEY',
     ];
 
-    public static function create(): FindNfeAdapter
+    public static function create(): FindExternalNfeAdapter
     {
         self::checkEnvVars();
 
-        return new FindNfeAdapter(
+        return new FindExternalNfeAdapter(
             SendRequestFactory::create(),
             env('ARQUIVEI_API_BASE_URI', 'https://sandbox-api.arquivei.com.br'),
             env('ARQUIVEI_API_ID'),

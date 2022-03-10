@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Core\Modules\DataLoader\Rule;
 
 use Core\Modules\DataLoader\Entity\NfeEntity;
-use Core\Modules\DataLoader\Entity\NfeToPersist;
+use Core\Modules\DataLoader\Entity\NfeToPersistEntity;
 use Core\Modules\DataLoader\Gateway\SaveNfeGateway;
 
 /**
@@ -16,7 +16,7 @@ class SaveDataRule implements RuleInterface
     private array $nfes = [];
 
     public function __construct(
-        private SaveNfeGateway $SaveNfeGateway,
+        private SaveNfeGateway $saveNfeGateway,
     ) {
     }
 
@@ -33,12 +33,12 @@ class SaveDataRule implements RuleInterface
     public function apply(): void
     {
         $persistNfeEntities = array_map(function (NfeEntity $nfe) {
-            return new NfeToPersist(
+            return new NfeToPersistEntity(
                 key: $nfe->getKey(),
-                value: $nfe->getTotalValue(),
+                totalValue: $nfe->getTotalValue(),
             );
         }, $this->nfes);
 
-        $this->SaveNfeGateway->save($persistNfeEntities);
+        $this->saveNfeGateway->save($persistNfeEntities);
     }
 }
