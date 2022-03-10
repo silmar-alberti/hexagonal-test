@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Core\Modules\GetNfeValue\Rule;
 
-use Core\Modules\GetNfeValue\Entity\NfeEntity;
 use Core\Modules\GetNfeValue\Gateway\GetNfeGateway;
 
 class GetNfeByKeyRule
