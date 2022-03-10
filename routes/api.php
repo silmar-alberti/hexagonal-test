@@ -11,9 +11,9 @@
 |
 */
 
-use App\Http\Controllers\TestController;
+use App\Http\Controllers\GetNfeValueController;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => 'v1', 'middleware' => []], function () {
-    // Route::get('/test', [TestController::class, 'index'])->name('test.index');
+    Route::get('/nfe/value/{nfeKey}', GetNfeValueController::class);
 });
