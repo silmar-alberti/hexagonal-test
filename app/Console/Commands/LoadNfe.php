@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Console\Commands;
 
-use App\Adapters\Modules\DataLoader\Repository\FindNfeAdapter;
-use App\Factories\Http\SendRequestFactory;
 use App\Factories\Modules\DataLoader\FindNfeAdapterFactory;
 use Core\Modules\DataLoader\Rule\LoadDataRule;
 use Core\Modules\DataLoader\UseCase;

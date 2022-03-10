@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Adapters\Modules\DataLoader\Repository;
+namespace App\Adapters\Modules\DataLoader;
 
 use App\Dependencies\Http\Adapter\SendRequestAdapter;
 use Core\Dependencies\Entity\RequestEntity;

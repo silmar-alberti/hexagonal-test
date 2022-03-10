@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Factories\Modules\DataLoader;
 
-use App\Adapters\Modules\DataLoader\Repository\FindNfeAdapter;
+use App\Adapters\Modules\DataLoader\FindNfeAdapter;
 use App\Exceptions\Modules\DataLoader\WrongEnvException;
 use App\Factories\Http\SendRequestFactory;
 
