@@ -16,6 +16,9 @@ class SaveNfeAdapter implements SaveNfeGateway
     ) {
     }
 
+    /**
+     * @param NfeToPersistEntity[] $nfes
+     */
     public function save(array $nfes): void
     {
         $mappedData = array_map(function (NfeToPersistEntity $nfe) {

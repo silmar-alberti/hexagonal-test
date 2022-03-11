@@ -54,10 +54,8 @@ class FindExternalNfeAdapter implements FindExternalNfeGateway
     private function getRequestFilters(GetNfeFilterEntity $filter)
     {
         $filterArray = [];
-        if ($filter->limit !== null) {
-            $filterArray['limit'] = $filter->limit;
-        }
 
+        $filterArray['limit'] = $filter->limit;
         $filterArray['cursor'] = $filter->cursor;
 
         return $filterArray;

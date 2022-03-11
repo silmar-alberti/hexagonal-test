@@ -17,6 +17,8 @@
     </include>
     <exclude>
       <directory suffix=".php">./tests</directory>
+      <directory suffix=".php">./app/Providers</directory>
+      <directory suffix=".php">./app/Http/Middleware</directory>
     </exclude>
   </coverage>
   <testsuites>
