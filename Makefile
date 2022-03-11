@@ -77,6 +77,7 @@ coverage:
 		--entrypoint ./vendor/bin/phpunit \
 		--volume ${PWD}:/application \
 		--workdir /application \
+        -e XDEBUG_MODE=coverage \
 		${APP_IDENTIFIER}_php-fpm \
 		--whitelist tests/ \
 		--coverage-html storage/tests/coverage/

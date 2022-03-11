@@ -11,7 +11,7 @@ use Core\Modules\DataLoader\Gateway\IntegrationStatusGateway;
 
 class LoadDataRule implements RuleInterface
 {
-    const STEP_AMOUNT = 50;
+    private const STEP_AMOUNT = 50;
 
     public function __construct(
         private FindExternalNfeGateway $findNfe,
