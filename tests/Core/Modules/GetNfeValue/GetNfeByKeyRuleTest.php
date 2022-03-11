@@ -32,7 +32,6 @@ class GetNfeByKeyRuleTest extends TestCase
      */
     public function testApply(?NfeEntity $fakeValue, ?float $expectedValue)
     {
-
         $gatewayMock = $this->createMock(GetNfeGateway::class);
 
         $gatewayMock->expects($this->once())

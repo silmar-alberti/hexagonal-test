@@ -20,12 +20,10 @@ class FindExternalNfeAdapter implements FindExternalNfeGateway
     ) {
     }
 
-    public function get(?GetNfeFilterEntity $filter = null): array
+    public function get(GetNfeFilterEntity $filter): array
     {
-        $filters = [];
-        if ($filter !== null) {
-            $filters =  $this->getRequestFilters($filter);
-        }
+
+        $filters =  $this->getRequestFilters($filter);
 
         $response = $this->httpClient->get(new RequestEntity(
             url: $this->baseUri . '/v1/nfe/received',

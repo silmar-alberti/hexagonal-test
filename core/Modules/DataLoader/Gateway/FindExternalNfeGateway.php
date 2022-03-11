@@ -13,5 +13,5 @@ interface FindExternalNfeGateway
      * get Nfe by filters, return all if haven't filters
      * @return NfeEntity[]
      */
-    public function get(?GetNfeFilterEntity $filter = null): array;
+    public function get(GetNfeFilterEntity $filter): array;
 }

@@ -15,10 +15,13 @@ class FilterRule implements RuleInterface
     private array $nfes;
 
     public function __construct(
-        private NfeExistsGateway $nfeExistsRepository,
+        private NfeExistsGateway $nfeExistsGateway,
     ) {
     }
 
+    /**
+     * @param NfeEntity[] $nfes
+     */
     public function __invoke(array $nfes): void
     {
         $this->nfes = $nfes;
@@ -30,7 +33,7 @@ class FilterRule implements RuleInterface
     public function apply(): array
     {
         $keys = array_map(fn (NfeEntity $nfe) => $nfe->getKey(), $this->nfes);
-        $exitentKeys = $this->nfeExistsRepository->getExistentKeys($keys);
+        $exitentKeys = $this->nfeExistsGateway->getExistentKeys($keys);
 
 
         return array_filter($this->nfes, function (NfeEntity $nfe) use ($exitentKeys) {
