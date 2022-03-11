@@ -8,6 +8,7 @@
 setup:
 	./scripts/setup.sh
 	make build composer-install up
+	make apply-migrations
 
 up:
 	@docker-compose up -d
@@ -27,12 +28,23 @@ logs:
 php:
 	@docker-compose exec php-fpm sh
 
+attach-database:
+	@docker-compose exec database psql -U ${APP_IDENTIFIER} -d ${APP_IDENTIFIER}
+
+apply-migrations:
+	@docker-compose exec php-fpm \
+	    php artisan migrate
+
 clear:
 	@docker-compose exec php-fpm \
 	    php artisan cache:clear \
 	    && php artisan route:clear \
 	    && php artisan config:clear \
 	    && php artisan view:clear
+
+load-database:
+	@docker-compose exec php-fpm \
+	    php artisan nfe:load
 
 ##############################
 ## Quality                  ##
