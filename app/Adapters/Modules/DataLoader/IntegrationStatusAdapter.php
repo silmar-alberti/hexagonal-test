@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Adapters\Modules\DataLoader;
 
+use Core\Modules\DataLoader\Exception\DataOperationException;
 use Core\Modules\DataLoader\Gateway\IntegrationStatusGateway;
 use Illuminate\Database\Connection;
 
@@ -31,9 +32,13 @@ class IntegrationStatusAdapter implements IntegrationStatusGateway
 
     public function updateNextCursor(int $nextCursor): void
     {
-        $this->db->table('integration')
+        $success = $this->db->table('integration')
             ->insert([
                 'next_cursor' => $nextCursor
             ]);
+
+        if ($success === false) {
+            throw new DataOperationException('Error on save next cursor');
+        }
     }
 }

@@ -10,6 +10,7 @@ use Core\Dependencies\Entity\RequestEntity;
 use Core\Dependencies\Entity\ResponseEntity;
 use Core\Modules\DataLoader\Entity\GetNfeFilterEntity;
 use Core\Modules\DataLoader\Entity\NfeEntity;
+use Core\Modules\DataLoader\Exception\ExternalApiException;
 use PHPUnit\Framework\TestCase;
 use SimpleXMLElement;
 
@@ -58,7 +59,30 @@ class FindExternalNfeAdapterTest extends TestCase
         $this->assertEmpty($adapter->get(new GetNfeFilterEntity(10, 50)));
     }
 
-    public function testShouldReturnOndeNfe()
+    public function testShouldThrowExeption()
+    {
+        $this->sendRequestMock
+            ->method('get')
+            ->willReturn(new ResponseEntity(
+                403,
+                json_encode([
+                    'error' => 'testError',
+                ])
+            ));
+
+
+        $adapter = new FindExternalNfeAdapter(
+            $this->sendRequestMock,
+            '',
+            '',
+            '',
+        );
+        $this->expectException(ExternalApiException::class);
+
+        $adapter->get(new GetNfeFilterEntity());
+    }
+
+    public function testShouldReturnOneNfe()
     {
 
         $this->sendRequestMock

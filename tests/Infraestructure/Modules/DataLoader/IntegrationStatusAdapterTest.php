@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Adapters\Modules\DataLoader\IntegrationStatusAdapter;
+use Core\Modules\DataLoader\Exception\DataOperationException;
 use Illuminate\Database\Connection;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Collection;
@@ -80,6 +81,21 @@ class IntegrationStatusAdapterTest extends TestCase
         );
 
         $this->assertEmpty($adapter->updateNextCursor(12));
+    }
+
+    public function testUpdateThrowException()
+    {
+        $builderMock = $this->createMock(Builder::class);
+        $builderMock->expects($this->once())
+            ->method('insert')
+            ->willReturn(false);
+
+        $adapter = new IntegrationStatusAdapter(
+            $this->createDbMock($builderMock)
+        );
+
+        $this->expectException(DataOperationException::class);
+        $adapter->updateNextCursor(12);
     }
 
     private function createDbMock($builderMock)

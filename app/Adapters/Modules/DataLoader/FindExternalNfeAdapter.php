@@ -8,6 +8,7 @@ use App\Dependencies\Http\Adapter\SendRequestAdapter;
 use Core\Dependencies\Entity\RequestEntity;
 use Core\Modules\DataLoader\Entity\GetNfeFilterEntity;
 use Core\Modules\DataLoader\Entity\NfeEntity;
+use Core\Modules\DataLoader\Exception\ExternalApiException;
 use Core\Modules\DataLoader\Gateway\FindExternalNfeGateway;
 
 class FindExternalNfeAdapter implements FindExternalNfeGateway
@@ -36,7 +37,10 @@ class FindExternalNfeAdapter implements FindExternalNfeGateway
         ));
 
         if ($response->statusCode !== 200) {
-            // TODO Exception here
+            $exception = new ExternalApiException('Error on get new nfes');
+            $exception->setResponse($response);
+
+            throw $exception;
         }
 
         $data = json_decode($response->body);
