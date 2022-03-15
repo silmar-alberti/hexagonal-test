@@ -11,6 +11,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.1",
+        "ext-simplexml": "*",
         "arquivei/events-sender": "3.2.1",
         "arquivei/laravel-health-checker": "2.2.0",
         "arquivei/log-adapter": "1.0.0",

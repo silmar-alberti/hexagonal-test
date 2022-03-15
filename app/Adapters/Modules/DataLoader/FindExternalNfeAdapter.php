@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace App\Adapters\Modules\DataLoader;
 
 use App\Dependencies\Http\Adapter\SendRequestAdapter;
-use Core\Dependencies\Entity\RequestEntity;
+use App\Exceptions\Modules\DataLoader\ExternalApiException;
 use Core\Modules\DataLoader\Entity\GetNfeFilterEntity;
 use Core\Modules\DataLoader\Entity\NfeEntity;
-use Core\Modules\DataLoader\Exception\ExternalApiException;
 use Core\Modules\DataLoader\Gateway\FindExternalNfeGateway;
+use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Psr7\Uri;
 
 class FindExternalNfeAdapter implements FindExternalNfeGateway
 {
@@ -23,27 +24,29 @@ class FindExternalNfeAdapter implements FindExternalNfeGateway
 
     public function get(GetNfeFilterEntity $filter): array
     {
-
         $filters =  $this->getRequestFilters($filter);
 
-        $response = $this->httpClient->get(new RequestEntity(
-            url: $this->baseUri . '/v1/nfe/received',
-            queryParams: $filters,
+        $uri = new Uri($this->baseUri . '/v1/nfe/received');
+        $uri = URI::withQueryValues($uri, $filters);
+        $request = new Request(
+            method:'GET',
+            uri:  $uri,
             headers: [
                 'x-api-id' => $this->apiId,
                 'x-api-key' => $this->apiKey,
                 'Content-Type' => 'application/json',
             ],
-        ));
+        );
+        $response = $this->httpClient->request($request);
 
-        if ($response->statusCode !== 200) {
+        if ($response->getStatusCode() !== 200) {
             $exception = new ExternalApiException('Error on get new nfes');
             $exception->setResponse($response);
 
             throw $exception;
         }
 
-        $data = json_decode($response->body);
+        $data = json_decode((string) $response->getBody());
 
         return array_map(function (object $nfeData) {
             $xmlString = base64_decode($nfeData->xml);

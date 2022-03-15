@@ -4,30 +4,19 @@ declare(strict_types=1);
 
 namespace App\Dependencies\Http\Adapter;
 
-use Core\Dependencies\Common\Http\SendRequestGateway;
-use Core\Dependencies\Entity\RequestEntity;
-use Core\Dependencies\Entity\ResponseEntity;
 use GuzzleHttp\Client;
-use GuzzleHttp\RequestOptions;
+use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Psr7\Response;
 
-class SendRequestAdapter implements SendRequestGateway
+class SendRequestAdapter
 {
     public function __construct(
         private Client $httpClient
     ) {
     }
 
-    public function get(RequestEntity $request): ResponseEntity
+    public function request(Request $request): Response
     {
-        $response = $this->httpClient->request('GET', $request->url, [
-            RequestOptions::HEADERS => $request->headers,
-            RequestOptions::QUERY => $request->queryParams,
-        ]);
-
-        return new ResponseEntity(
-            statusCode: $response->getStatusCode(),
-            body: (string) $response->getBody(),
-            headers: $response->getHeaders(),
-        );
+        return $this->httpClient->sendRequest($request);
     }
 }
