@@ -2,15 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Tests\InfraEstructure\Modules\DataLoader;
+namespace Tests\Infraestructure\Modules\DataLoader;
 
 use App\Adapters\Modules\DataLoader\FindExternalNfeAdapter;
 use App\Dependencies\Http\Adapter\SendRequestAdapter;
-use Core\Dependencies\Entity\RequestEntity;
-use Core\Dependencies\Entity\ResponseEntity;
+use App\Exceptions\Modules\DataLoader\ExternalApiException;
 use Core\Modules\DataLoader\Entity\GetNfeFilterEntity;
 use Core\Modules\DataLoader\Entity\NfeEntity;
-use Core\Modules\DataLoader\Exception\ExternalApiException;
+use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Psr7\Response;
+use GuzzleHttp\Psr7\Uri;
 use PHPUnit\Framework\TestCase;
 use SimpleXMLElement;
 
@@ -25,12 +26,15 @@ class FindExternalNfeAdapterTest extends TestCase
     }
     public function testApiRequest()
     {
-        $expectedRequestEntity = new RequestEntity(
-            url: 'baseUri/v1/nfe/received',
-            queryParams: [
-                'limit' => 10,
-                'cursor' => 50,
-            ],
+        $uri = new Uri('baseUri/v1/nfe/received');
+        $uri = URI::withQueryValues($uri, [
+            'limit' => 10,
+            'cursor' => 50,
+        ]);
+
+        $expectedRequestEntity = new Request(
+            method:'GET',
+            uri:  $uri,
             headers: [
                 'x-api-id' => 'apiId',
                 'x-api-key' => 'apiKey',
@@ -40,20 +44,20 @@ class FindExternalNfeAdapterTest extends TestCase
 
         $this->sendRequestMock
             ->expects($this->once())
-            ->method('get')
+            ->method('request')
             ->with($expectedRequestEntity)
-            ->willReturn(new ResponseEntity(
-                200,
-                json_encode([
+            ->willReturn(new Response(
+                status: 200,
+                body: json_encode([
                     'data' => []
                 ])
             ));
 
         $adapter = new FindExternalNfeAdapter(
-            $this->sendRequestMock,
-            'baseUri',
-            'apiId',
-            'apiKey',
+            httpClient: $this->sendRequestMock,
+            baseUri: 'baseUri',
+            apiId: 'apiId',
+            apiKey: 'apiKey',
         );
 
         $this->assertEmpty($adapter->get(new GetNfeFilterEntity(10, 50)));
@@ -62,20 +66,20 @@ class FindExternalNfeAdapterTest extends TestCase
     public function testShouldThrowExeption()
     {
         $this->sendRequestMock
-            ->method('get')
-            ->willReturn(new ResponseEntity(
-                403,
-                json_encode([
+            ->method('request')
+            ->willReturn(new Response(
+                status: 403,
+                body: json_encode([
                     'error' => 'testError',
                 ])
             ));
 
 
         $adapter = new FindExternalNfeAdapter(
-            $this->sendRequestMock,
-            '',
-            '',
-            '',
+            httpClient: $this->sendRequestMock,
+            baseUri: '',
+            apiId: '',
+            apiKey: '',
         );
         $this->expectException(ExternalApiException::class);
 
@@ -86,10 +90,10 @@ class FindExternalNfeAdapterTest extends TestCase
     {
 
         $this->sendRequestMock
-            ->method('get')
-            ->willReturn(new ResponseEntity(
-                200,
-                json_encode([
+            ->method('request')
+            ->willReturn(new Response(
+                status: 200,
+                body: json_encode([
                     'data' => [
                         [
                             'xml' => base64_encode('<xml></xml>'),
@@ -105,10 +109,10 @@ class FindExternalNfeAdapterTest extends TestCase
         );
 
         $adapter = new FindExternalNfeAdapter(
-            $this->sendRequestMock,
-            '',
-            '',
-            '',
+            httpClient: $this->sendRequestMock,
+            baseUri: '',
+            apiId: '',
+            apiKey: '',
         );
 
         $nfes = $adapter->get(new GetNfeFilterEntity());
